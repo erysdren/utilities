@@ -177,9 +177,6 @@ static int dos_text_get_attributes();
 static void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n);
 static void dos_text_puts(uint16_t x, uint16_t y, const char *s);
 static void dos_text_putc(uint16_t x, uint16_t y, char c);
-#ifdef __LIBREX_STRING_H__
-static void dos_text_putstring(uint16_t x, uint16_t y, string_t *s);
-#endif
 
 /* microsoft mouse */
 static void dos_mouse_enable();
@@ -354,19 +351,6 @@ static void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n)
 	/* do copy */
 	memcpy((void *)(DOS_TEXT_MEMORY + ofs), (void *)s, n * sizeof(uint16_t));
 }
-
-#ifdef __LIBREX_STRING_H__
-/* place string_t s at column x, row y */
-static void dos_text_putstring(uint16_t x, uint16_t y, string_t *s)
-{
-	/* variables */
-	int i;
-
-	/* perform put loop */
-	for (i = 0; i < s->len; i++)
-		dos_text_putc(x + i, y, s->buf[i]);
-}
-#endif
 
 /* place char sequence s at column x, row y */
 static void dos_text_puts(uint16_t x, uint16_t y, const char *s)

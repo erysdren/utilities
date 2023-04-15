@@ -2,6 +2,8 @@
 
 shared C headers for my projects
 
+there's a few "platform" files that are meant to be a generic API to draw video on different platforms (SDL2, DOS, GLFW, fenster). they generally assume software-rendered graphics and a low memory footprint.
+
 ## license
 
 ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)

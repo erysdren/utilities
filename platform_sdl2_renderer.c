@@ -90,6 +90,9 @@ struct
 	/* keys */
 	uint8_t keys[256];
 
+	/* scratch buffer */
+	char scratch[256];
+
 } context;
 
 /*
@@ -323,9 +326,17 @@ void platform_mouse(int *x, int *y, int *dx, int *dy)
  * platform_error
  */
 
-void platform_error(const char *s)
+void platform_error(const char *s, ...)
 {
-	fprintf(stderr, "Error: %s\n", s);
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", s, NULL);
+	va_list ap;
+
+	platform_quit();
+
+	va_start(ap, s);
+	vsprintf(context.scratch, s, ap);
+	va_end(ap);
+
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", context.scratch, NULL);
+
 	exit(1);
 }

@@ -167,8 +167,15 @@ void platform_mouse(int *x, int *y, int *dx, int *dy)
  * platform_error
  */
 
-void platform_error(const char *s)
+void platform_error(const char *s, ...)
 {
-	fprintf(stderr, "Error: %s\n", s);
+	va_list ap;
+
+	platform_quit();
+
+	va_start(ap, s);
+	vfprintf(stderr, s, ap);
+	va_end(ap);
+
 	exit(1);
 }

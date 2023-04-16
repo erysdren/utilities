@@ -273,4 +273,4 @@ void platform_screen_clear(uint32_t c);
 int platform_key(int sc);
 void platform_draw_pixel(uint16_t x, uint16_t y, uint32_t c);
 void platform_mouse(int *x, int *y, int *dx, int *dy);
-void platform_error(const char *s);
+void platform_error(const char *s, ...);

@@ -164,6 +164,7 @@ static void dos_clear_screen();
 /* graphics mode functions */
 static void dos_graphics_clear_screen();
 static void dos_graphics_putb(uint8_t *s, size_t n);
+static void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
 
 /* text mode functions */
 static void dos_text_set_cursor_shape(uint16_t shape);
@@ -236,6 +237,15 @@ static void dos_graphics_putb(uint8_t *s, size_t n)
 	/* sanity check */
 	if (n > 64000) return;
 	memcpy((void *)DOS_GRAPHICS_MEMORY, (void *)s, n * sizeof(uint8_t));
+}
+
+/* set a color in the palette */
+void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b)
+{
+	outp(0x3c8, i);
+	outp(0x3c9, (r * 63) / 255);
+	outp(0x3c9, (g * 63) / 255);
+	outp(0x3c9, (b * 63) / 255);
 }
 
 /*

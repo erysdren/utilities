@@ -145,10 +145,67 @@ extern "C" {
 #ifdef __DJGPP__
 #define DOS_GRAPHICS_MEMORY (0xA0000 + __djgpp_conventional_base)
 #define DOS_TEXT_MEMORY (0xB8000 + __djgpp_conventional_base)
+#define ATTR_PACKED __attribute__((packed));
 #else
 #define DOS_GRAPHICS_MEMORY (0xA0000L)
 #define DOS_TEXT_MEMORY (0xB8000L)
+#define ATTR_PACKED
 #endif
+
+/* vesa info */
+typedef struct
+{ 
+	uint8_t VESASignature[4] ATTR_PACKED;
+	uint16_t VESAVersion ATTR_PACKED;
+	uint32_t OEMStringPtr ATTR_PACKED;
+	uint8_t Capabilities[4] ATTR_PACKED;
+	uint32_t VideoModePtr ATTR_PACKED;
+	uint16_t TotalMemory ATTR_PACKED;
+	uint16_t OemSoftwareRev ATTR_PACKED;
+	uint32_t OemVendorNamePtr ATTR_PACKED;
+	uint32_t OemProductNamePtr ATTR_PACKED;
+	uint32_t OemProductRevPtr ATTR_PACKED;
+	uint8_t Reserved[222] ATTR_PACKED;
+	uint8_t OemData[256] ATTR_PACKED;
+} vesa_info_t;
+
+/* vesa mode info */
+typedef struct
+{
+	uint16_t ModeAttributes ATTR_PACKED;
+	uint8_t WinAAttributes ATTR_PACKED;
+	uint8_t WinBAttributes ATTR_PACKED;
+	uint16_t WinGranularity ATTR_PACKED;
+	uint16_t WinSize ATTR_PACKED;
+	uint16_t WinASegment ATTR_PACKED;
+	uint16_t WinBSegment ATTR_PACKED;
+	uint32_t WinFuncPtr ATTR_PACKED;
+	uint16_t BytesPerScanLine ATTR_PACKED;
+	uint16_t XResolution ATTR_PACKED;
+	uint16_t YResolution ATTR_PACKED;
+	uint8_t XCharSize ATTR_PACKED;
+	uint8_t YCharSize ATTR_PACKED;
+	uint8_t NumberOfPlanes ATTR_PACKED;
+	uint8_t BitsPerPixel ATTR_PACKED;
+	uint8_t NumberOfBanks ATTR_PACKED;
+	uint8_t MemoryModel ATTR_PACKED;
+	uint8_t BankSize ATTR_PACKED;
+	uint8_t NumberOfImagePages ATTR_PACKED;
+	uint8_t Reserved_page ATTR_PACKED;
+	uint8_t RedMaskSize ATTR_PACKED;
+	uint8_t RedMaskPos ATTR_PACKED;
+	uint8_t GreenMaskSize ATTR_PACKED;
+	uint8_t GreenMaskPos ATTR_PACKED;
+	uint8_t BlueMaskSize ATTR_PACKED;
+	uint8_t BlueMaskPos ATTR_PACKED;
+	uint8_t ReservedMaskSize ATTR_PACKED;
+	uint8_t ReservedMaskPos ATTR_PACKED;
+	uint8_t DirectColorModeInfo ATTR_PACKED;
+	uint32_t PhysBasePtr ATTR_PACKED;
+	uint32_t OffScreenMemOffset ATTR_PACKED;
+	uint16_t OffScreenMemSize ATTR_PACKED;
+	uint8_t Reserved[206] ATTR_PACKED;
+} vesa_mode_info_t;
 
 /* *************************************
  *

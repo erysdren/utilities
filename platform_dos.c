@@ -82,6 +82,10 @@ struct
 	/* keys */
 	uint8_t keys[256];
 
+	/* vesa */
+	vesa_info_t vesa_info;
+	vesa_mode_info_t vesa_mode_info;
+
 } context;
 
 /*
@@ -93,22 +97,18 @@ int platform_init(int w, int h, const char *title)
 	/* get current video mode */
 	context.old_mode = dos_get_mode();
 
-	/* mode 13 only */
-	dos_set_mode(DOS_MODE_13);
-	if (dos_get_mode() != DOS_MODE_13) return 0;
-
 	/* suppress warnings */
 	(void)title;
-	(void)w;
-	(void)h;
+
+	/* vesa */
 
 	/* enable mouse */
 	dos_mouse_enable();
 	dos_mouse_hide();
 
 	/* set values */
-	context.width = 320;
-	context.height = 200;
+	context.width = w;
+	context.height = h;
 	context.running = 1;
 
 	/* alloc pixels */

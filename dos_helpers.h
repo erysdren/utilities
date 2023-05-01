@@ -223,6 +223,11 @@ static void dos_graphics_clear_screen();
 static void dos_graphics_putb(uint8_t *s, size_t n);
 static void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
 
+/* vesa functions */
+static int dos_vesa_get_info(vesa_info_t *vesa_info);
+static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info);
+static int dos_vesa_find_mode(int w, int h, int bpp);
+
 /* text mode functions */
 static void dos_text_set_cursor_shape(uint16_t shape);
 static void dos_text_set_cursor_pos(uint16_t x, uint16_t y);
@@ -304,6 +309,29 @@ void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b)
 	outp(0x3c9, (g * 63) / 255);
 	outp(0x3c9, (b * 63) / 255);
 }
+
+/*
+ * vesa functions
+ */
+
+/* fill vesa info into struct */
+static int dos_vesa_get_info(vesa_info_t *vesa_info)
+{
+	return -1;
+}
+
+/* fill vesa mode info into struct */
+static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info)
+{
+	return -1;
+}
+
+/* find request vesa mode from width, height and bpp */
+static int dos_vesa_find_mode(int w, int h, int bpp)
+{
+	return -1;
+}
+
 
 /*
  * text mode functions

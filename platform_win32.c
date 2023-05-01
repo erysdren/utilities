@@ -47,42 +47,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 
-/* dos helpers */
-#include "dos_helpers.h"
+/* windows */
+#include <windows.h>
 
 /* platform */
 #include "platform.h"
-
-/*
- * globals
- */
-
-/* platform context */
-struct
-{
-
-	/* variables */
-	uint8_t running;
-	uint8_t *pixels;
-	int width;
-	int height;
-	int old_mode;
-
-	struct
-	{
-		int x;		/* x pos */
-		int y;		/* y pos */
-		int dx;		/* delta x */
-		int dy;		/* delta y */
-		int b;		/* button mask */
-	} mouse;
-
-	/* keys */
-	uint8_t keys[256];
-
-} context;
 
 /*
  * platform_init
@@ -90,33 +60,7 @@ struct
 
 int platform_init(int w, int h, const char *title)
 {
-	/* get current video mode */
-	context.old_mode = dos_get_mode();
-
-	/* mode 13 only */
-	dos_set_mode(DOS_MODE_13);
-	if (dos_get_mode() != DOS_MODE_13) return 0;
-
-	/* suppress warnings */
-	(void)title;
-	(void)w;
-	(void)h;
-
-	/* enable mouse */
-	dos_mouse_enable();
-	dos_mouse_hide();
-
-	/* set values */
-	context.width = 320;
-	context.height = 200;
-	context.running = 1;
-
-	/* alloc pixels */
-	context.pixels = malloc(context.width * context.height * sizeof(uint8_t));
-	if (context.pixels == NULL) return 0;
-
-	/* return success */
-	return 1;
+	return 0;
 }
 
 /*
@@ -125,9 +69,7 @@ int platform_init(int w, int h, const char *title)
 
 void platform_quit()
 {
-	if (context.pixels) free(context.pixels);
-	dos_mouse_hide();
-	dos_set_mode(context.old_mode);
+
 }
 
 /*
@@ -136,7 +78,7 @@ void platform_quit()
 
 int platform_running()
 {
-	return context.running;
+	return 0;
 }
 
 /*
@@ -145,20 +87,7 @@ int platform_running()
 
 void platform_frame_start()
 {
-	/* variables */
-	int16_t x, y, b;
 
-	/* get */
-	dos_mouse_get(&x, &y, &b);
-
-	/* delta */
-	context.mouse.dx = x - context.mouse.x;
-	context.mouse.dy = y - context.mouse.y;
-
-	/* pos and button */
-	context.mouse.x = x;
-	context.mouse.y = y;
-	context.mouse.b = b;
 }
 
 /*
@@ -167,7 +96,7 @@ void platform_frame_start()
 
 void platform_frame_end()
 {
-	dos_graphics_putb(context.pixels, context.width * context.height);
+
 }
 
 /*
@@ -176,10 +105,7 @@ void platform_frame_end()
 
 void platform_screen_clear(uint32_t c)
 {
-	int i;
 
-	for (i = 0; i < context.width * context.height; i++)
-		context.pixels[i] = c;
 }
 
 /*
@@ -188,7 +114,7 @@ void platform_screen_clear(uint32_t c)
 
 int platform_key(int sc)
 {
-	return context.keys[sc];
+	return -1;
 }
 
 /*
@@ -197,24 +123,16 @@ int platform_key(int sc)
 
 void platform_draw_pixel(uint16_t x, uint16_t y, uint32_t c)
 {
-	context.pixels[(y * context.width) + x] = c;
+
 }
 
 /*
  * platform_mouse
  */
 
-void platform_mouse(int *x, int *y, int *dx, int *dy)
+int platform_mouse(int *x, int *y, int *dx, int *dy)
 {
-	/* set ptrs */
-	if (x) *x = context.mouse.x;
-	if (y) *y = context.mouse.y;
-	if (dx) *dx = context.mouse.dx;
-	if (dy) *dy = context.mouse.dy;
-
-	/* reset delta after each read? */
-	context.mouse.dx = 0;
-	context.mouse.dy = 0;
+	return 0;
 }
 
 /*
@@ -223,15 +141,7 @@ void platform_mouse(int *x, int *y, int *dx, int *dy)
 
 void platform_error(const char *s, ...)
 {
-	va_list ap;
 
-	platform_quit();
-
-	va_start(ap, s);
-	vfprintf(stderr, s, ap);
-	va_end(ap);
-
-	exit(1);
 }
 
 /*

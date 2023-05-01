@@ -186,7 +186,7 @@ void platform_error(const char *s, ...)
 
 void platform_mouse_capture()
 {
-	return;
+
 }
 
 /*
@@ -195,5 +195,5 @@ void platform_mouse_capture()
 
 void platform_mouse_release()
 {
-	return;
+
 }

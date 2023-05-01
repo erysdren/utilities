@@ -41,8 +41,8 @@
 
 /* guards */
 #pragma once
-#ifndef __DOS_H__
-#define __DOS_H__
+#ifndef __DOS_HELPERS_H__
+#define __DOS_HELPERS_H__
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -434,4 +434,4 @@ static void dos_mouse_set(int16_t x, int16_t y, int16_t b)
 #ifdef __cplusplus
 }
 #endif
-#endif /* __DOS_H__ */
+#endif /* __DOS_HELPERS_H__ */

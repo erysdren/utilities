@@ -141,8 +141,6 @@ void platform_error(const char *s, ...)
 {
 	va_list ap;
 
-	platform_quit();
-
 	va_start(ap, s);
 	vfprintf(stderr, s, ap);
 	va_end(ap);

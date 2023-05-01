@@ -49,10 +49,19 @@
 #include <stdint.h>
 
 /* glfw */
-#include <GLFW/glfw3.h>>
+#include <GLFW/glfw3.h>
 
 /* platform */
 #include "platform.h"
+
+/*
+ * globals
+ */
+
+GLFWwindow *window;
+uint32_t *pixels;
+int width;
+int height;
 
 /*
  * platform_init
@@ -60,7 +69,29 @@
 
 int platform_init(int w, int h, const char *title)
 {
-	return 0;
+	/* init library */
+	if (glfwInit() == GLFW_FALSE)
+		return GLFW_FALSE;
+
+	/* init window */
+	glfwDefaultWindowHints();
+	window = glfwCreateWindow(w, h, title, NULL, NULL);
+	if (window == NULL) return GLFW_FALSE;
+
+	/* make current */
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
+
+	/* alloc */
+	pixels = (uint32_t *)malloc(w * h * sizeof(uint32_t));
+	if (pixels == NULL) return GLFW_FALSE;
+
+	/* set */
+	width = w;
+	height = h;
+
+	/* return success */
+	return GLFW_TRUE;
 }
 
 /*
@@ -69,7 +100,11 @@ int platform_init(int w, int h, const char *title)
 
 void platform_quit()
 {
+	/* destroy window */
+	glfwDestroyWindow(window);
 
+	/* shutdown */
+	glfwTerminate();
 }
 
 /*
@@ -78,7 +113,7 @@ void platform_quit()
 
 int platform_running()
 {
-	return 0;
+	return glfwWindowShouldClose(window) ? 0 : 1;
 }
 
 /*
@@ -87,7 +122,7 @@ int platform_running()
 
 void platform_frame_start()
 {
-
+	glfwPollEvents();
 }
 
 /*
@@ -96,7 +131,7 @@ void platform_frame_start()
 
 void platform_frame_end()
 {
-
+	glfwSwapBuffers(window);
 }
 
 /*
@@ -105,7 +140,10 @@ void platform_frame_end()
 
 void platform_screen_clear(uint32_t c)
 {
+	int i;
 
+	for (i = 0; i < width * height; i++)
+		pixels[i] = c;
 }
 
 /*
@@ -114,7 +152,7 @@ void platform_screen_clear(uint32_t c)
 
 int platform_key(int sc)
 {
-	return -1;
+	return glfwGetKey(window, sc);
 }
 
 /*
@@ -123,7 +161,7 @@ int platform_key(int sc)
 
 void platform_draw_pixel(uint16_t x, uint16_t y, uint32_t c)
 {
-
+	pixels[(y * width) + x] = c;
 }
 
 /*
@@ -141,7 +179,15 @@ int platform_mouse(int *x, int *y, int *dx, int *dy)
 
 void platform_error(const char *s, ...)
 {
+	va_list ap;
 
+	platform_quit();
+
+	va_start(ap, s);
+	vfprintf(stderr, s, ap);
+	va_end(ap);
+
+	exit(1);
 }
 
 /*

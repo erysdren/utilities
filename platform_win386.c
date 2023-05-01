@@ -162,7 +162,7 @@ void platform_error(const char *s, ...)
 	vsprintf(context.scratch, s, ap);
 	va_end(ap);
 
-    MessageBox(NULL, context.scratch, "ERROR", MB_OK | MB_TASKMODAL); 
+	MessageBox(NULL, context.scratch, "ERROR", MB_OK | MB_TASKMODAL);
 	exit(1);
 }
 

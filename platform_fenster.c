@@ -179,3 +179,21 @@ void platform_error(const char *s, ...)
 
 	exit(1);
 }
+
+/*
+ * platform_mouse_capture
+ */
+
+void platform_mouse_capture()
+{
+	return;
+}
+
+/*
+ * platform_mouse_release
+ */
+
+void platform_mouse_release()
+{
+	return;
+}

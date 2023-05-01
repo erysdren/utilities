@@ -340,3 +340,21 @@ void platform_error(const char *s, ...)
 
 	exit(1);
 }
+
+/*
+ * platform_mouse_capture
+ */
+
+void platform_mouse_capture()
+{
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
+/*
+ * platform_mouse_release
+ */
+
+void platform_mouse_release()
+{
+	SDL_SetRelativeMouseMode(SDL_FALSE);
+}

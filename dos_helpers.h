@@ -225,7 +225,7 @@ static void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
 
 /* vesa functions */
 static int dos_vesa_get_info(vesa_info_t *vesa_info);
-static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info);
+static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode);
 static int dos_vesa_find_mode(int w, int h, int bpp);
 
 /* text mode functions */
@@ -317,19 +317,82 @@ void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b)
 /* fill vesa info into struct */
 static int dos_vesa_get_info(vesa_info_t *vesa_info)
 {
-	return -1;
+	/* variables */
+	__dpmi_regs r;
+	long dosbuf;
+	int c;
+
+	/* use the conventional memory transfer buffer */
+	dosbuf = __tb & 0xFFFFF;
+
+	/* initialize the buffer to zero */
+	for (c = 0; c < sizeof(vesa_info_t); c++)
+		_farpokeb(_dos_ds, dosbuf + c, 0);
+
+	dosmemput("VBE2", 4, dosbuf);
+
+	/* call the VESA function */
+	r.x.ax = 0x4F00;
+	r.x.di = dosbuf & 0xF;
+	r.x.es = (dosbuf >> 4) & 0xFFFF;
+	__dpmi_int(0x10, &r);
+
+	/* quit if there was an error */
+	if (r.h.ah)
+		return 0;
+
+	/* copy the resulting data into our structure */
+	dosmemget(dosbuf, sizeof(vesa_info_t), vesa_info);
+
+	/* check that we got the right magic marker value */
+	if (memcmp(vesa_info->VESASignature, "VESA", 4) != 0)
+		return 0;
+
+	/* return success */
+	return 1;
 }
 
 /* fill vesa mode info into struct */
-static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info)
+static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode)
 {
-	return -1;
+	/* variables */
+	__dpmi_regs r;
+	long dosbuf;
+	int c;
+
+	/* use the conventional memory transfer buffer */
+	dosbuf = __tb & 0xFFFFF;
+
+	/* initialize the buffer to zero */
+	for (c = 0; c < sizeof(vesa_mode_info_t); c++)
+		_farpokeb(_dos_ds, dosbuf + c, 0);
+
+	/* call the VESA function */
+	r.x.ax = 0x4F01;
+	r.x.di = dosbuf & 0xF;
+	r.x.es = (dosbuf>>4) & 0xFFFF;
+	r.x.cx = mode;
+	__dpmi_int(0x10, &r);
+
+	/* quit if there was an error */
+	if (r.h.ah)
+		return 0;
+
+	/* copy the resulting data into our structure */
+	dosmemget(dosbuf, sizeof(vesa_mode_info_t), vesa_mode_info);
+
+	/* return success */
+	return 1;
 }
 
 /* find request vesa mode from width, height and bpp */
 static int dos_vesa_find_mode(int w, int h, int bpp)
 {
-	return -1;
+	/* variables */
+	int mode;
+
+	/* return success */
+	return mode;
 }
 
 

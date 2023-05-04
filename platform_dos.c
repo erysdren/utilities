@@ -92,7 +92,7 @@ struct
  * platform_init
  */
 
-int platform_init(int w, int h, const char *title)
+int platform_init(int w, int h, int bpp, const char *title)
 {
 	/* get current video mode */
 	context.old_mode = dos_get_mode();

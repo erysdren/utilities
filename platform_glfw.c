@@ -67,11 +67,14 @@ int height;
  * platform_init
  */
 
-int platform_init(int w, int h, const char *title)
+int platform_init(int w, int h, int bpp, const char *title)
 {
 	/* init library */
 	if (glfwInit() == GLFW_FALSE)
 		return GLFW_FALSE;
+
+	/* suppress warnings */
+	(void)bpp;
 
 	/* init window */
 	glfwDefaultWindowHints();

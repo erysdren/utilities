@@ -264,7 +264,7 @@ enum
  * functions
  */
 
-int platform_init(int w, int h, const char *title);
+int platform_init(int w, int h, int bpp, const char *title);
 void platform_quit();
 int platform_running();
 void platform_frame_start();

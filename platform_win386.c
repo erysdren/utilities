@@ -66,7 +66,7 @@ struct
  * platform_init
  */
 
-int platform_init(int w, int h, const char *title)
+int platform_init(int w, int h, int bpp, const char *title)
 {
 	return 0;
 }

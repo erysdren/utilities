@@ -66,7 +66,7 @@ int running;
  * platform_init
  */
 
-int platform_init(int w, int h, const char *title)
+int platform_init(int w, int h, int bpp, const char *title)
 {
 	/* title */
 	f.title = calloc(strlen(title) + 1, sizeof(char));

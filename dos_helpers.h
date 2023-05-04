@@ -145,7 +145,7 @@ extern "C" {
 #ifdef __DJGPP__
 #define DOS_GRAPHICS_MEMORY (0xA0000 + __djgpp_conventional_base)
 #define DOS_TEXT_MEMORY (0xB8000 + __djgpp_conventional_base)
-#define ATTR_PACKED __attribute__((packed));
+#define ATTR_PACKED __attribute__((packed))
 #else
 #define DOS_GRAPHICS_MEMORY (0xA0000L)
 #define DOS_TEXT_MEMORY (0xB8000L)
@@ -227,7 +227,7 @@ static void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
 static int dos_vesa_get_info(vesa_info_t *vesa_info);
 static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode);
 static int dos_vesa_find_mode(int w, int h, int bpp);
-static int dos_vesa_set_mode(int w, int h, int bpp);
+static int dos_vesa_set_mode(uint16_t mode);
 static void dos_vesa_set_bank(int bank);
 static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n);
 
@@ -449,19 +449,13 @@ static int dos_vesa_find_mode(int w, int h, int bpp)
 }
 
 /* find and set vesa mode from width, height and bpp */
-static int dos_vesa_set_mode(int w, int h, int bpp)
+static int dos_vesa_set_mode(uint16_t mode)
 {
 	__dpmi_regs r;
-	int mode_number;
-
-	/* find the number for this mode */
-	mode_number = dos_vesa_find_mode(w, h, bpp);
-	if (!mode_number)
-		return 0;
 
 	/* call the VESA mode set function */
 	r.x.ax = 0x4F02;
-	r.x.bx = mode_number;
+	r.x.bx = mode;
 	__dpmi_int(0x10, &r);
 
 	/* check for error */
@@ -490,7 +484,7 @@ static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n)
 	int bank_granularity = mode_info->WinGranularity * 1024;
 	int bank_number = 0;
 	int todo = n;
-	int copy_size;
+	int copy_size = 0;
 
 	while (todo > 0)
 	{

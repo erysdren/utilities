@@ -52,6 +52,7 @@
 #include <SDL2/SDL.h>
 
 /* platform */
+#define PLATFORM_SDL2 1
 #include "platform.h"
 
 /*

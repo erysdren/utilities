@@ -227,6 +227,9 @@ static void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
 static int dos_vesa_get_info(vesa_info_t *vesa_info);
 static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode);
 static int dos_vesa_find_mode(int w, int h, int bpp);
+static int dos_vesa_set_mode(int w, int h, int bpp);
+static void dos_vesa_set_bank(int bank);
+static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n);
 
 /* text mode functions */
 static void dos_text_set_cursor_shape(uint16_t shape);
@@ -385,16 +388,130 @@ static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode)
 	return 1;
 }
 
-/* find request vesa mode from width, height and bpp */
+/* request vesa mode from width, height and bpp */
 static int dos_vesa_find_mode(int w, int h, int bpp)
 {
-	/* variables */
-	int mode;
+	int mode_list[256];
+	int number_of_modes;
+	long mode_ptr;
+	int c;
+	vesa_info_t vesa_info;
+	vesa_mode_info_t vesa_mode_info;
 
-	/* return success */
-	return mode;
+	/* check that the VESA driver exists, and get information about it */
+	if (!dos_vesa_get_info(&vesa_info))
+		return 0;
+
+	/* convert the mode list pointer from seg:offset to a linear address */
+	mode_ptr = ((vesa_info.VideoModePtr & 0xFFFF0000) >> 12) + 
+		(vesa_info.VideoModePtr & 0xFFFF);
+
+	number_of_modes = 0;
+
+	/* read the list of available modes */
+	while (_farpeekw(_dos_ds, mode_ptr) != 0xFFFF)
+	{
+		mode_list[number_of_modes] = _farpeekw(_dos_ds, mode_ptr);
+		number_of_modes++;
+		mode_ptr += 2;
+	}
+
+	/* scan through the list of modes looking for the one that we want */
+	for (c = 0; c < number_of_modes; c++)
+	{
+		/* get information about this mode */
+		if (!dos_vesa_get_mode_info(&vesa_mode_info, mode_list[c]))
+			continue;
+
+		/* check the flags field to make sure this is a color graphics mode,
+		* and that it is supported by the current hardware */
+		if ((vesa_mode_info.ModeAttributes & 0x19) != 0x19)
+			continue;
+
+		/* check that this mode is the right size */
+		if ((vesa_mode_info.XResolution != w) || (vesa_mode_info.YResolution != h))
+			continue;
+
+		/* check that there is only one color plane */
+		if (vesa_mode_info.NumberOfPlanes != 1)
+			continue;
+
+		/* check that this is an 8-bit (256 color) mode */
+		if (vesa_mode_info.BitsPerPixel != bpp)
+			continue;
+
+		/* if it passed all those checks, this must be the mode we want! */
+		return mode_list[c];
+	}
+
+	/* oh dear, there was no mode matching the one we wanted! */
+	return 0; 
 }
 
+/* find and set vesa mode from width, height and bpp */
+static int dos_vesa_set_mode(int w, int h, int bpp)
+{
+	__dpmi_regs r;
+	int mode_number;
+
+	/* find the number for this mode */
+	mode_number = dos_vesa_find_mode(w, h, bpp);
+	if (!mode_number)
+		return 0;
+
+	/* call the VESA mode set function */
+	r.x.ax = 0x4F02;
+	r.x.bx = mode_number;
+	__dpmi_int(0x10, &r);
+
+	/* check for error */
+	if (r.h.ah)
+		return 0;
+
+	/* it worked! */
+	return 1;
+}
+
+/* set vesa bank for writing pixels */
+static void dos_vesa_set_bank(int bank)
+{
+	__dpmi_regs r;
+
+	r.x.ax = 0x4F05;
+	r.x.bx = 0;
+	r.x.dx = bank;
+	__dpmi_int(0x10, &r);
+}
+
+/* place a buffer on the screen based on current mode info */
+static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n)
+{
+	int bank_size = mode_info->WinSize * 1024;
+	int bank_granularity = mode_info->WinGranularity * 1024;
+	int bank_number = 0;
+	int todo = n;
+	int copy_size;
+
+	while (todo > 0)
+	{
+		/* select the appropriate bank */
+		dos_vesa_set_bank(bank_number);
+
+		/* how much can we copy in one go? */
+		if (todo > bank_size)
+			copy_size = bank_size;
+		else
+			copy_size = todo;
+
+		/* copy a bank of data to the screen */
+		dosmemput(s, copy_size, 0xA0000);
+
+		/* move on to the next bank of data */
+		todo -= copy_size;
+		s += copy_size;
+		bank_number += bank_size / bank_granularity;
+	}
+}
 
 /*
  * text mode functions

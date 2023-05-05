@@ -240,7 +240,23 @@ int platform_key(int sc)
 
 void platform_draw_pixel(uint16_t x, uint16_t y, uint32_t c)
 {
-	context.pixels[(y * context.width) + x] = c;
+	switch (context.bpp)
+	{
+		case 8:
+			((uint8_t *)context.pixels)[(y * context.width) + x] = c;
+			break;
+
+		case 16:
+			((uint16_t *)context.pixels)[(y * context.width) + x] = c;
+			break;
+
+		case 32:
+			((uint32_t *)context.pixels)[(y * context.width) + x] = c;
+			break;
+
+		default:
+			break;
+	}
 }
 
 /*

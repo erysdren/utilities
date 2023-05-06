@@ -132,7 +132,7 @@ enum
 	KEY_F12 = 0x58
 };
 
-#elif PLATFORM_SDL2
+#elif PLATFORM_SDL2 || PLATFORM_SDL
 
 enum
 {

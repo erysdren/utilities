@@ -71,10 +71,10 @@ void platform_quit()
 }
 
 /*
- * platform_running
+ * platform_frame
  */
 
-int platform_running()
+int platform_frame()
 {
 	return 0;
 }

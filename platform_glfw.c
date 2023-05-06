@@ -111,15 +111,6 @@ void platform_quit()
 }
 
 /*
- * platform_running
- */
-
-int platform_running()
-{
-	return glfwWindowShouldClose(window) ? 0 : 1;
-}
-
-/*
  * platform_frame_start
  */
 
@@ -135,6 +126,23 @@ void platform_frame_start()
 void platform_frame_end()
 {
 	glfwSwapBuffers(window);
+}
+
+
+/*
+ * platform_frame
+ */
+
+int platform_frame()
+{
+	/* run end of last frame */
+	platform_frame_end();
+
+	/* run start of this frame */
+	platform_frame_start();
+
+	/* return run status */
+	return glfwWindowShouldClose(window) ? 0 : 1;
 }
 
 /*

@@ -149,15 +149,6 @@ void platform_quit()
 }
 
 /*
- * platform_running
- */
-
-int platform_running()
-{
-	return context.running;
-}
-
-/*
  * platform_frame_start
  */
 
@@ -260,6 +251,22 @@ void platform_frame_end()
 
 	SDL_BlitSurface(context.texture, NULL, context.window, &rect);
 	SDL_Flip(context.window);
+}
+
+/*
+ * platform_frame
+ */
+
+int platform_frame()
+{
+	/* run end of last frame */
+	platform_frame_end();
+
+	/* run start of this frame */
+	platform_frame_start();
+
+	/* return run status */
+	return context.running;
 }
 
 /*

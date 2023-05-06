@@ -94,15 +94,6 @@ void platform_quit()
 }
 
 /*
- * platform_running
- */
-
-int platform_running()
-{
-	return running;
-}
-
-/*
  * platform_frame_start
  */
 
@@ -121,6 +112,22 @@ void platform_frame_start()
 void platform_frame_end()
 {
 
+}
+
+/*
+ * platform_frame
+ */
+
+int platform_frame()
+{
+	/* run end of last frame */
+	platform_frame_end();
+
+	/* run start of this frame */
+	platform_frame_start();
+
+	/* return run status */
+	return context.running;
 }
 
 /*

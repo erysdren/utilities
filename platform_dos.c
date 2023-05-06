@@ -174,15 +174,6 @@ void platform_quit()
 }
 
 /*
- * platform_running
- */
-
-int platform_running()
-{
-	return context.running;
-}
-
-/*
  * platform_frame_start
  */
 
@@ -211,6 +202,22 @@ void platform_frame_start()
 void platform_frame_end()
 {
 	dos_vesa_putb(&context.vesa_mode_info, context.pixels, context.width * context.height * (context.bpp / 8));
+}
+
+/*
+ * platform_frame
+ */
+
+int platform_frame()
+{
+	/* run end of last frame */
+	platform_frame_end();
+
+	/* run start of this frame */
+	platform_frame_start();
+
+	/* return run status */
+	return context.running;
 }
 
 /*

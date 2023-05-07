@@ -182,11 +182,11 @@ void platform_frame_start()
 				break;
 
 			case SDL_KEYDOWN:
-				context.keys[event.key.keysym.scancode] = SDL_TRUE;
+				context.keys[event.key.keysym.sym] = SDL_TRUE;
 				break;
 
 			case SDL_KEYUP:
-				context.keys[event.key.keysym.scancode] = SDL_FALSE;
+				context.keys[event.key.keysym.sym] = SDL_FALSE;
 				break;
 		}
 	}

@@ -50,6 +50,9 @@
 /* platform */
 #include "platform.h"
 
+/* utilities */
+#include "rgb.h"
+
 /*
  * main
  */
@@ -59,15 +62,12 @@ int main(int argc, char **argv)
 	/* init platform */
 	platform_init(640, 480, 32, "hello");
 
-	while (platform_running())
+	/* main loop */
+	while (platform_frame())
 	{
-		platform_frame_start();
-
 		if (platform_key(KEY_ESCAPE)) break;
 
-		platform_screen_clear(UINT32_MAX);
-
-		platform_frame_end();
+		platform_screen_clear(ARGB(255, 255, 255, 255));
 	}
 
 	/* quit */

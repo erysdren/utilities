@@ -3,7 +3,7 @@ CC = wcl386
 
 CFLAGS = -l=os2v2 -bt=os2 -ei -DPLATFORM_SELF_TEST -I./local/sdl12/include/
 
-SOURCES = platform_sdl.c SDL12.lib
+SOURCES = platform_sdl.c SDL12.lib test.c
 
 all: clean platform_sdl
 

@@ -1,7 +1,7 @@
 
-CFLAGS = -pedantic -Wall -DPLATFORM_SELF_TEST `sdl-config --libs --cflags`
+CFLAGS = -pedantic -Wall `sdl-config --libs --cflags`
 
-SOURCES = platform_sdl.c
+SOURCES = platform_sdl.c test.c
 
 all: clean platform_sdl
 

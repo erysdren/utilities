@@ -353,36 +353,3 @@ void platform_mouse_release()
 {
 
 }
-
-/*
- * platform self test
- */
-
-#ifdef PLATFORM_SELF_TEST
-
-#define ARGB(r, g, b, a) (((a) << 24) | ((r) << 16) | ((g) << 8) | (b))
-
-int main(int argc, char **argv)
-{
-	/* init platform */
-	platform_init(640, 480, 32, "hello");
-
-	while (platform_running())
-	{
-		platform_frame_start();
-
-		if (platform_key(KEY_ESCAPE)) break;
-
-		platform_screen_clear(UINT32_MAX);
-
-		platform_frame_end();
-	}
-
-	/* quit */
-	platform_quit();
-
-	/* return success */
-	return 0;
-}
-
-#endif

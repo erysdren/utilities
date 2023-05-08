@@ -40,7 +40,7 @@
  * ************************************************************************* */
 
 /*
- * keyboard scancodes (from sdl2)
+ * keyboard scancodes
  */
 
 #if PLATFORM_DOS

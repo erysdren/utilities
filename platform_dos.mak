@@ -3,7 +3,7 @@ CC = i586-pc-msdosdjgpp-gcc
 
 CFLAGS = -pedantic -Wall -DPLATFORM_SELF_TEST
 
-SOURCES = platform_dos.c
+SOURCES = platform_dos.c test.c
 
 all: clean platform_dos
 

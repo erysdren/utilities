@@ -61,23 +61,29 @@ extern "C" {
 #define RGBA(r, g, b, a) (((r) << 24) | ((g) << 16) | ((b) << 8) | (a))
 
 /*
+ * palette macros
+ */
+
+#define PALETTE_RGB24(i, p) ((rgb24_t *)(&p[(i) * 3]))
+
+/*
  * rgb types
  */
 
 typedef struct
 {
 	uint8_t r, g, b;
-} rgb_t;
+} rgb24_t;
 
 typedef struct
 {
 	uint8_t r, g, b, a;
-} rgba_t;
+} rgba32_t;
 
 typedef struct
 {
 	uint8_t a, r, g, b;
-} argb_t;
+} argb32_t;
 
 /* guards */
 #ifdef __cplusplus

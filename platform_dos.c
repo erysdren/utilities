@@ -228,8 +228,26 @@ void platform_screen_clear(uint32_t c)
 {
 	int i;
 
-	for (i = 0; i < context.width * context.height * (context.bpp / 8); i++)
-		context.pixels[i] = c;
+	switch (context.bpp)
+	{
+		case 8:
+			for (i = 0; i < context.width * context.height; i++)
+				((uint8_t *)context.pixels)[i] = c;
+			break;
+
+		case 16:
+			for (i = 0; i < context.width * context.height; i++)
+				((uint16_t *)context.pixels)[i] = c;
+			break;
+
+		case 32:
+			for (i = 0; i < context.width * context.height; i++)
+				((uint32_t *)context.pixels)[i] = c;
+			break;
+
+		default:
+			break;
+	}
 }
 
 /*

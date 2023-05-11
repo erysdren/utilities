@@ -7,3 +7,5 @@ local/
 *.rex
 *.dll
 *.lib
+dosbox-x.conf
+dosbox-x.sh

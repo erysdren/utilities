@@ -2,6 +2,7 @@
 *.code-workspace
 local/
 *.o
+*.obj
 *.err
 *.exe
 *.rex

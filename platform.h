@@ -40,10 +40,18 @@
  * ************************************************************************* */
 
 /*
+ * std
+ */
+
+#include <stdint.h>
+
+/*
  * keyboard scancodes
  */
 
 #if PLATFORM_SDL2
+
+#include <SDL2/SDL.h>
 
 enum
 {
@@ -133,6 +141,8 @@ enum
 };
 
 #elif PLATFORM_SDL
+
+#include <SDL.h>
 
 enum
 {

@@ -14,4 +14,4 @@ clean:
 platform_sdl: $(SOURCES)
 	$(CC) $(CFLAGS) platform_sdl.c
 	$(CC) $(CFLAGS) test.c
-	$(LINK) SYS nt_win NAM platform_sdl.exe FIL platform_sdl.o FIL test.o LIBF SDLmain.lib LIBR SDL.lib
+	$(LINK) SYS nt_win NAM platform_sdl_win32.exe FIL platform_sdl.o FIL test.o LIBF SDLmain.lib LIBR SDL.lib

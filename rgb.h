@@ -57,33 +57,17 @@ extern "C" {
  * rgb packing macros
  */
 
-#define ARGB(r, g, b, a) (((a) << 24) | ((r) << 16) | ((g) << 8) | (b))
-#define RGBA(r, g, b, a) (((r) << 24) | ((g) << 16) | ((b) << 8) | (a))
+#define RGBA8888(r, g, b, a) ((((uint32_t)(r)) << 24) | \
+	(((uint32_t)(g)) << 16) | (((uint32_t)(b)) << 8) | ((uint32_t)(a)))
 
-/*
- * palette macros
- */
+#define ARGB8888(r, g, b, a) ((((uint32_t)(a)) << 24) | \
+	(((uint32_t)(r)) << 16) | (((uint32_t)(g)) << 8) | ((uint32_t)(b)))
 
-#define PALETTE_RGB24(i, p) ((rgb24_t *)(&p[(i) * 3]))
+#define ABGR8888(r, g, b, a) ((((uint32_t)(a)) << 24) | \
+	(((uint32_t)(b)) << 16) | (((uint32_t)(g)) << 8) | ((uint32_t)(r)))
 
-/*
- * rgb types
- */
-
-typedef struct
-{
-	uint8_t r, g, b;
-} rgb24_t;
-
-typedef struct
-{
-	uint8_t r, g, b, a;
-} rgba32_t;
-
-typedef struct
-{
-	uint8_t a, r, g, b;
-} argb32_t;
+#define RGB565(r, g, b) ((((((uint16_t)(r)) >> 3) & 0x1f) << 11) | \
+	(((((uint16_t)(g)) >> 2) & 0x3f) << 5) | ((((uint16_t)(b)) >> 3) & 0x1f))
 
 /* guards */
 #ifdef __cplusplus

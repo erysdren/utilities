@@ -2,6 +2,15 @@
 
 shared C utilities for my projects
 
+## index
+
+| file | description |
+|------|-------------|
+| `bitswap.c` `bitswap.h` | switch endianness of 16, 32 and 64 bit ints |
+| `dos_utils.c` `dos_utils.h` | making interop with MS-DOS easier |
+| `fixed_point_math.h` | 16.16 fixed-point math implemented entirely in macros |
+| `rgb.h` | rgb packing and unpacking macros |
+
 ## license
 
 ANTI-CAPITALIST SOFTWARE LICENSE (v 1.4)

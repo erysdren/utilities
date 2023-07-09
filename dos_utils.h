@@ -41,8 +41,8 @@
 
 /* guards */
 #pragma once
-#ifndef __DOS_HELPERS_H__
-#define __DOS_HELPERS_H__
+#ifndef __DOS_UTILS_H__
+#define __DOS_UTILS_H__
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -145,66 +145,64 @@ extern "C" {
 #ifdef __DJGPP__
 #define DOS_GRAPHICS_MEMORY (0xA0000 + __djgpp_conventional_base)
 #define DOS_TEXT_MEMORY (0xB8000 + __djgpp_conventional_base)
-#define ATTR_PACKED __attribute__((packed))
 #else
 #define DOS_GRAPHICS_MEMORY (0xA0000L)
 #define DOS_TEXT_MEMORY (0xB8000L)
-#define ATTR_PACKED
 #endif
 
 /* vesa info */
 typedef struct
 { 
-	uint8_t VESASignature[4] ATTR_PACKED;
-	uint16_t VESAVersion ATTR_PACKED;
-	uint32_t OEMStringPtr ATTR_PACKED;
-	uint8_t Capabilities[4] ATTR_PACKED;
-	uint32_t VideoModePtr ATTR_PACKED;
-	uint16_t TotalMemory ATTR_PACKED;
-	uint16_t OemSoftwareRev ATTR_PACKED;
-	uint32_t OemVendorNamePtr ATTR_PACKED;
-	uint32_t OemProductNamePtr ATTR_PACKED;
-	uint32_t OemProductRevPtr ATTR_PACKED;
-	uint8_t Reserved[222] ATTR_PACKED;
-	uint8_t OemData[256] ATTR_PACKED;
+	uint8_t VESASignature[4];
+	uint16_t VESAVersion;
+	uint32_t OEMStringPtr;
+	uint8_t Capabilities[4];
+	uint32_t VideoModePtr;
+	uint16_t TotalMemory;
+	uint16_t OemSoftwareRev;
+	uint32_t OemVendorNamePtr;
+	uint32_t OemProductNamePtr;
+	uint32_t OemProductRevPtr;
+	uint8_t Reserved[222];
+	uint8_t OemData[256];
 } vesa_info_t;
 
 /* vesa mode info */
 typedef struct
 {
-	uint16_t ModeAttributes ATTR_PACKED;
-	uint8_t WinAAttributes ATTR_PACKED;
-	uint8_t WinBAttributes ATTR_PACKED;
-	uint16_t WinGranularity ATTR_PACKED;
-	uint16_t WinSize ATTR_PACKED;
-	uint16_t WinASegment ATTR_PACKED;
-	uint16_t WinBSegment ATTR_PACKED;
-	uint32_t WinFuncPtr ATTR_PACKED;
-	uint16_t BytesPerScanLine ATTR_PACKED;
-	uint16_t XResolution ATTR_PACKED;
-	uint16_t YResolution ATTR_PACKED;
-	uint8_t XCharSize ATTR_PACKED;
-	uint8_t YCharSize ATTR_PACKED;
-	uint8_t NumberOfPlanes ATTR_PACKED;
-	uint8_t BitsPerPixel ATTR_PACKED;
-	uint8_t NumberOfBanks ATTR_PACKED;
-	uint8_t MemoryModel ATTR_PACKED;
-	uint8_t BankSize ATTR_PACKED;
-	uint8_t NumberOfImagePages ATTR_PACKED;
-	uint8_t Reserved_page ATTR_PACKED;
-	uint8_t RedMaskSize ATTR_PACKED;
-	uint8_t RedMaskPos ATTR_PACKED;
-	uint8_t GreenMaskSize ATTR_PACKED;
-	uint8_t GreenMaskPos ATTR_PACKED;
-	uint8_t BlueMaskSize ATTR_PACKED;
-	uint8_t BlueMaskPos ATTR_PACKED;
-	uint8_t ReservedMaskSize ATTR_PACKED;
-	uint8_t ReservedMaskPos ATTR_PACKED;
-	uint8_t DirectColorModeInfo ATTR_PACKED;
-	uint32_t PhysBasePtr ATTR_PACKED;
-	uint32_t OffScreenMemOffset ATTR_PACKED;
-	uint16_t OffScreenMemSize ATTR_PACKED;
-	uint8_t Reserved[206] ATTR_PACKED;
+	uint16_t ModeAttributes;
+	uint8_t WinAAttributes;
+	uint8_t WinBAttributes;
+	uint16_t WinGranularity;
+	uint16_t WinSize;
+	uint16_t WinASegment;
+	uint16_t WinBSegment;
+	uint32_t WinFuncPtr;
+	uint16_t BytesPerScanLine;
+	uint16_t XResolution;
+	uint16_t YResolution;
+	uint8_t XCharSize;
+	uint8_t YCharSize;
+	uint8_t NumberOfPlanes;
+	uint8_t BitsPerPixel;
+	uint8_t NumberOfBanks;
+	uint8_t MemoryModel;
+	uint8_t BankSize;
+	uint8_t NumberOfImagePages;
+	uint8_t Reserved_page;
+	uint8_t RedMaskSize;
+	uint8_t RedMaskPos;
+	uint8_t GreenMaskSize;
+	uint8_t GreenMaskPos;
+	uint8_t BlueMaskSize;
+	uint8_t BlueMaskPos;
+	uint8_t ReservedMaskSize;
+	uint8_t ReservedMaskPos;
+	uint8_t DirectColorModeInfo;
+	uint32_t PhysBasePtr;
+	uint32_t OffScreenMemOffset;
+	uint16_t OffScreenMemSize;
+	uint8_t Reserved[206];
 } vesa_mode_info_t;
 
 /* *************************************
@@ -214,42 +212,42 @@ typedef struct
  * ********************************** */
 
 /* mode-agnostic functions */
-static void dos_set_mode(uint16_t mode);
-static int dos_get_mode();
-static void dos_clear_screen();
+void dos_set_mode(uint16_t mode);
+int dos_get_mode();
+void dos_clear_screen();
 
 /* graphics mode functions */
-static void dos_graphics_clear_screen();
-static void dos_graphics_putb(uint8_t *s, size_t n);
-static void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
+void dos_graphics_clear_screen();
+void dos_graphics_putb(uint8_t *s, size_t n);
+void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b);
 
 /* vesa functions */
-static int dos_vesa_get_info(vesa_info_t *vesa_info);
-static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode);
-static int dos_vesa_find_mode(int w, int h, int bpp);
-static int dos_vesa_set_mode(uint16_t mode);
-static void dos_vesa_set_bank(int bank);
-static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n);
+int dos_vesa_get_info(vesa_info_t *vesa_info);
+int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode);
+int dos_vesa_find_mode(int w, int h, int bpp);
+int dos_vesa_set_mode(uint16_t mode);
+void dos_vesa_set_bank(int bank);
+void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n);
 
 /* text mode functions */
-static void dos_text_set_cursor_shape(uint16_t shape);
-static void dos_text_set_cursor_pos(uint16_t x, uint16_t y);
-static void dos_text_get_cursor_pos(uint16_t *x, uint16_t *y);
-static void dos_text_clear_screen();
-static int dos_text_get_screen_columns();
-static int dos_text_get_screen_rows();
-static void dos_text_get_screen_size(int *w, int *h);
-static int dos_text_get_attributes();
-static void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n);
-static void dos_text_puts(uint16_t x, uint16_t y, const char *s);
-static void dos_text_putc(uint16_t x, uint16_t y, char c);
+void dos_text_set_cursor_shape(uint16_t shape);
+void dos_text_set_cursor_pos(uint16_t x, uint16_t y);
+void dos_text_get_cursor_pos(uint16_t *x, uint16_t *y);
+void dos_text_clear_screen();
+int dos_text_get_screen_columns();
+int dos_text_get_screen_rows();
+void dos_text_get_screen_size(int *w, int *h);
+int dos_text_get_attributes();
+void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n);
+void dos_text_puts(uint16_t x, uint16_t y, const char *s);
+void dos_text_putc(uint16_t x, uint16_t y, char c);
 
 /* microsoft mouse */
-static void dos_mouse_enable();
-static void dos_mouse_show();
-static void dos_mouse_hide();
-static void dos_mouse_get(int16_t *x, int16_t *y, int16_t *b);
-static void dos_mouse_set(int16_t x, int16_t y, int16_t b);
+void dos_mouse_enable();
+void dos_mouse_show();
+void dos_mouse_hide();
+void dos_mouse_get(int16_t *x, int16_t *y, int16_t *b);
+void dos_mouse_set(int16_t x, int16_t y, int16_t b);
 
 /* *************************************
  *
@@ -262,7 +260,7 @@ static void dos_mouse_set(int16_t x, int16_t y, int16_t b);
  */
 
 /* set mode of vga adapter */
-static void dos_set_mode(uint16_t mode)
+void dos_set_mode(uint16_t mode)
 {
 	union REGS r;
 	r.w.ax = mode;
@@ -270,7 +268,7 @@ static void dos_set_mode(uint16_t mode)
 }
 
 /* get mode of vga adapter */
-static int dos_get_mode()
+int dos_get_mode()
 {
 	union REGS r;
 	r.h.ah = 0x0f;
@@ -279,7 +277,7 @@ static int dos_get_mode()
 }
 
 /* clear both video mode and text mode screen memory */
-static void dos_clear_screen()
+void dos_clear_screen()
 {
 	dos_graphics_clear_screen();
 	dos_text_clear_screen();
@@ -290,14 +288,14 @@ static void dos_clear_screen()
  */
 
 /* clear vga screen buffer */
-static void dos_graphics_clear_screen()
+void dos_graphics_clear_screen()
 {
 	memset((void *)DOS_GRAPHICS_MEMORY, 0, 64000);
 	dos_text_set_cursor_pos(0, 0);
 }
 
 /* place n 1-byte segments from pointer s to the graphics memory */
-static void dos_graphics_putb(uint8_t *s, size_t n)
+void dos_graphics_putb(uint8_t *s, size_t n)
 {
 	/* sanity check */
 	if (n > 64000) return;
@@ -318,7 +316,7 @@ void dos_set_palette_color(uint8_t i, uint8_t r, uint8_t g, uint8_t b)
  */
 
 /* fill vesa info into struct */
-static int dos_vesa_get_info(vesa_info_t *vesa_info)
+int dos_vesa_get_info(vesa_info_t *vesa_info)
 {
 	/* variables */
 	__dpmi_regs r;
@@ -356,7 +354,7 @@ static int dos_vesa_get_info(vesa_info_t *vesa_info)
 }
 
 /* fill vesa mode info into struct */
-static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode)
+int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode)
 {
 	/* variables */
 	__dpmi_regs r;
@@ -389,7 +387,7 @@ static int dos_vesa_get_mode_info(vesa_mode_info_t *vesa_mode_info, int mode)
 }
 
 /* request vesa mode from width, height and bpp */
-static int dos_vesa_find_mode(int w, int h, int bpp)
+int dos_vesa_find_mode(int w, int h, int bpp)
 {
 	int mode_list[256];
 	int number_of_modes;
@@ -449,7 +447,7 @@ static int dos_vesa_find_mode(int w, int h, int bpp)
 }
 
 /* find and set vesa mode from width, height and bpp */
-static int dos_vesa_set_mode(uint16_t mode)
+int dos_vesa_set_mode(uint16_t mode)
 {
 	__dpmi_regs r;
 
@@ -467,7 +465,7 @@ static int dos_vesa_set_mode(uint16_t mode)
 }
 
 /* set vesa bank for writing pixels */
-static void dos_vesa_set_bank(int bank)
+void dos_vesa_set_bank(int bank)
 {
 	__dpmi_regs r;
 
@@ -478,7 +476,7 @@ static void dos_vesa_set_bank(int bank)
 }
 
 /* place a buffer on the screen based on current mode info */
-static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n)
+void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n)
 {
 	int bank_size = mode_info->WinSize * 1024;
 	int bank_granularity = mode_info->WinGranularity * 1024;
@@ -512,7 +510,7 @@ static void dos_vesa_putb(vesa_mode_info_t *mode_info, uint8_t *s, size_t n)
  */
 
 /* set the shape of the cursor */
-static void dos_text_set_cursor_shape(uint16_t shape)
+void dos_text_set_cursor_shape(uint16_t shape)
 {
 	union REGS r;
 	r.h.ah = 1;
@@ -521,7 +519,7 @@ static void dos_text_set_cursor_shape(uint16_t shape)
 }
 
 /* set text cursor position */
-static void dos_text_set_cursor_pos(uint16_t x, uint16_t y)
+void dos_text_set_cursor_pos(uint16_t x, uint16_t y)
 {
 	union REGS r;
 	r.h.ah = 2;
@@ -532,7 +530,7 @@ static void dos_text_set_cursor_pos(uint16_t x, uint16_t y)
 }
 
 /* get text cursor position */
-static void dos_text_get_cursor_pos(uint16_t *x, uint16_t *y)
+void dos_text_get_cursor_pos(uint16_t *x, uint16_t *y)
 {
 	union REGS r;
 	r.h.ah = 3;
@@ -543,7 +541,7 @@ static void dos_text_get_cursor_pos(uint16_t *x, uint16_t *y)
 }
 
 /* clear text screen buffer */
-static void dos_text_clear_screen()
+void dos_text_clear_screen()
 {
 	/* variables */
 	size_t s;
@@ -565,7 +563,7 @@ static void dos_text_clear_screen()
 }
 
 /* get text screen columns */
-static int dos_text_get_screen_columns()
+int dos_text_get_screen_columns()
 {
 	#ifdef __DJGPP__
 	return _farpeekb(_dos_ds, 0x44a);
@@ -575,7 +573,7 @@ static int dos_text_get_screen_columns()
 }
 
 /* get text screen rows */
-static int dos_text_get_screen_rows()
+int dos_text_get_screen_rows()
 {
 	#ifdef __DJGPP__
 	return _farpeekb(_dos_ds, 0x484) + 1;
@@ -585,14 +583,14 @@ static int dos_text_get_screen_rows()
 }
 
 /* get text screen size */
-static void dos_text_get_screen_size(int *rows, int *columns)
+void dos_text_get_screen_size(int *rows, int *columns)
 {
 	if (rows) *rows = dos_text_get_screen_rows();
 	if (columns) *columns = dos_text_get_screen_columns();
 }
 
 /* retrieve current text attributes */
-static int dos_text_get_attributes()
+int dos_text_get_attributes()
 {
 	union REGS r;
 	r.h.ah = 0x08;
@@ -603,7 +601,7 @@ static int dos_text_get_attributes()
 }
 
 /* place n 2-byte segments from pointer s to the text memory */
-static void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n)
+void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n)
 {
 	/* variables */
 	size_t max, rows, cols, ofs;
@@ -622,7 +620,7 @@ static void dos_text_putb(uint16_t x, uint16_t y, uint16_t *s, size_t n)
 }
 
 /* place char sequence s at column x, row y */
-static void dos_text_puts(uint16_t x, uint16_t y, const char *s)
+void dos_text_puts(uint16_t x, uint16_t y, const char *s)
 {
 	/* variables */
 	int i;
@@ -633,7 +631,7 @@ static void dos_text_puts(uint16_t x, uint16_t y, const char *s)
 }
 
 /* place char c at column x, row y */
-static void dos_text_putc(uint16_t x, uint16_t y, char c)
+void dos_text_putc(uint16_t x, uint16_t y, char c)
 {
 	((uint16_t *)DOS_TEXT_MEMORY)[y * dos_text_get_screen_columns() + x] = 
 		c | (dos_text_get_attributes() << 8);
@@ -644,7 +642,7 @@ static void dos_text_putc(uint16_t x, uint16_t y, char c)
  */
 
 /* enable mouse driver */
-static void dos_mouse_enable()
+void dos_mouse_enable()
 {
 	union REGS r;
 	r.w.ax = 0x00;
@@ -652,7 +650,7 @@ static void dos_mouse_enable()
 }
 
 /* show mouse cursor */
-static void dos_mouse_show()
+void dos_mouse_show()
 {
 	union REGS r;
 	r.w.ax = 0x01;
@@ -660,7 +658,7 @@ static void dos_mouse_show()
 }
 
 /* hide mouse cursor */
-static void dos_mouse_hide()
+void dos_mouse_hide()
 {
 	union REGS r;
 	r.w.ax = 0x02;
@@ -668,7 +666,7 @@ static void dos_mouse_hide()
 }
 
 /* get mouse values */
-static void dos_mouse_get(int16_t *x, int16_t *y, int16_t *b)
+void dos_mouse_get(int16_t *x, int16_t *y, int16_t *b)
 {
 	union REGS r;
 	r.w.ax = 0x03;
@@ -679,7 +677,7 @@ static void dos_mouse_get(int16_t *x, int16_t *y, int16_t *b)
 }
 
 /* set mouse values */
-static void dos_mouse_set(int16_t x, int16_t y, int16_t b)
+void dos_mouse_set(int16_t x, int16_t y, int16_t b)
 {
 	union REGS r;
 	r.w.ax = 0x04;
@@ -693,4 +691,4 @@ static void dos_mouse_set(int16_t x, int16_t y, int16_t b)
 #ifdef __cplusplus
 }
 #endif
-#endif /* __DOS_HELPERS_H__ */
+#endif /* __DOS_UTILS_H__ */

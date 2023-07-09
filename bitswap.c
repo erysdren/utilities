@@ -39,37 +39,79 @@
  *
  * ************************************************************************* */
 
-/* guards */
-#pragma once
-#ifndef __BITSWAP_H__
-#define __BITSWAP_H__
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* *************************************
  *
  * the headers
  *
  * ********************************** */
 
-#include <stdint.h>
+/* bitswap */
+#include "bitswap.h"
 
 /* *************************************
  *
- * the forward declarations
+ * the functions
  *
  * ********************************** */
 
-int16_t bitswap_int16(int16_t *val);
-uint16_t bitswap_uint16(uint16_t *val);
-int32_t bitswap_int32(int32_t *val);
-uint32_t bitswap_uint32(uint32_t *val);
-int64_t bitswap_int64(int64_t *val);
-uint64_t bitswap_uint64(uint64_t *val);
+/* bit swap int16_t */
+int16_t bitswap_int16(int16_t *val)
+{
+	*val = (*val << 8) | ((*val >> 8) & 0xFF);
 
-/* guards */
-#ifdef __cplusplus
+	return *val;
 }
-#endif
-#endif /* __BITSWAP_H__ */
+
+/* bit swap uint16_t */
+uint16_t bitswap_uint16(uint16_t *val)
+{
+	*val = (*val << 8) | (*val >> 8);
+
+	return *val;
+}
+
+/* bit swap int32_t */
+int32_t bitswap_int32(int32_t *val)
+{
+	int32_t out;
+
+	out = ((*val << 8) & 0xFF00FF00) | ((*val >> 8) & 0xFF00FF);
+	*val = (out << 16) | ((out >> 16) & 0xFFFF);
+
+	return *val;
+}
+
+/* bit swap uint32_t */
+uint32_t bitswap_uint32(uint32_t *val)
+{
+	uint32_t out;
+
+	out = ((*val << 8) & 0xFF00FF00) | ((*val >> 8) & 0xFF00FF);
+	*val = (out << 16) | (out >> 16);
+
+	return *val;
+}
+
+/* bit swap int64_t */
+int64_t bitswap_int64(int64_t *val)
+{
+	int64_t out;
+
+	out = ((*val << 8) & 0xFF00FF00FF00FF00ULL) | ((*val >> 8) & 0x00FF00FF00FF00FFULL);
+	out = ((out << 16) & 0xFFFF0000FFFF0000ULL) | ((out >> 16) & 0x0000FFFF0000FFFFULL);
+	*val = (out << 32) | ((out >> 32) & 0xFFFFFFFF);
+
+	return *val;
+}
+
+/* bit swap uint64_t */
+uint64_t bitswap_uint64(uint64_t *val)
+{
+	uint64_t out;
+
+	out = ((*val << 8) & 0xFF00FF00FF00FF00ULL) | ((*val >> 8) & 0x00FF00FF00FF00FFULL);
+	out = ((out << 16) & 0xFFFF0000FFFF0000ULL) | ((out >> 16) & 0x0000FFFF0000FFFFULL);
+	*val = (out << 32) | (out >> 32);
+
+	return *val;
+}

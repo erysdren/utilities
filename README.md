@@ -16,6 +16,7 @@ shared C utilities for my projects
 | `prey/wad.c` `prey/wad.h` | prey (1995 alpha build) wad parser |
 | `quake/mdl.c` | quake mdl loader |
 | `quake2/unwal.c` | convert quake 2 wal texture to png |
+| `unreal/upkg.c` | upkg loader |
 
 ## thirdparty
 

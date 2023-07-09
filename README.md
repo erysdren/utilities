@@ -10,9 +10,15 @@ shared C utilities for my projects
 | `dos_utils.c` `dos_utils.h` | making interop with MS-DOS easier |
 | `fixed_point_math.h` | 16.16 fixed-point math implemented entirely in macros |
 | `rgb.h` | rgb packing and unpacking macros |
+| `hrot/unpak.c` | uncompress hrot pak file |
 | `prey/bsp.c` `prey/bsp.h` | prey (1995 alpha build) bsp parser |
 | `prey/mip.c` `prey/mip.h` | prey (1995 alpha build) miptex parser |
 | `prey/wad.c` `prey/wad.h` | prey (1995 alpha build) wad parser |
+| `quake2/unwal.c` | convert quake 2 wal texture to png |
+
+## thirdparty
+
+- [`stb_image_write.h`](https://github.com/nothings/stb/blob/master/stb_image_write.h)
 
 ## license
 

@@ -14,6 +14,7 @@ shared C utilities for my projects
 | `prey/bsp.c` `prey/bsp.h` | prey (1995 alpha build) bsp parser |
 | `prey/mip.c` `prey/mip.h` | prey (1995 alpha build) miptex parser |
 | `prey/wad.c` `prey/wad.h` | prey (1995 alpha build) wad parser |
+| `quake/mdl.c` | quake mdl loader |
 | `quake2/unwal.c` | convert quake 2 wal texture to png |
 
 ## thirdparty
